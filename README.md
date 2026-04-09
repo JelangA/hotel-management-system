@@ -197,3 +197,23 @@ Tim Pengembang
 ## License
 
 MIT
+
+## Unit Test (MainTest.java)
+
+Bagian pengujian (unit testing) pada project ini dibuat menggunakan **JUnit 5 Jupiter** untuk memvalidasi alur aplikasi CLI (Command Line Interface).
+
+### Penjelasan `MainTest.java`
+
+Secara spesifik, pengujian pada `MainTest` memastikan bahwa saat aplikasi dijalankan, menu utama aplikasi dapat tampil di console. 
+
+Berikut adalah cara kerjanya:
+1. **Pencegatan I/O (Input/Output Interception):** 
+   - Aplikasi CLI asli mencetak teks ke console menggunakan `System.out` dan menerima input menggunakan `Scanner(System.in)`. Unit test mencegat `System.out` dengan `@BeforeEach setUpOutput()` ke dalam memori (`ByteArrayOutputStream`) agar dapat tervalidasi setelah proses berjalan.
+2. **Simulasi Input Pengguna (`provideInput`):** 
+   - Sistem diberikan simulasi keyboard buatan berupa string `"6\n"` yang berarti menekan tombol "6" (opsi Exit) lalu tombol Enter. Ini penting agar perulangan `do-while` menu utama di `Main.java` bisa berhenti secara otomatis saat di-*test*.
+3. **Eksekusi Utama (`@Test testApplicationDisplaysMainMenu`):**
+   - Method `Main.main(...)` dipanggil dari dalam kode *test*. Aplikasi berjalan, menu utama dicetak (disimpan di memori), lalu *scanner* otomatis menerima input "6" dan aplikasi menutup diri dari dalam perulangan *menu loop*.
+4. **Validasi (Assertions):**
+   - Output string di cek. Program mensyaratkan bahwa tampilan menu harus mengandung teks tertentu seperti `"Enter your choice :"`, `"1.Display room details"`, dan `"6.Exit"`. Seluruh *assertion* ini menggunakan `assertTrue(...)`.
+5. **Pembersihan (`@AfterEach restoreSystemInputOutput`):**
+   - Mengembalikan `System.out` dan `System.in` ke konfigurasi normal/bawaan OS agar jika ada *test suite* atau fungsi lainnya, mereka tidak akan terpengaruh oleh pencegatan yang dilakukan di test ini.
