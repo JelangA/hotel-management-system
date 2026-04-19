@@ -190,7 +190,7 @@ public class HotelServiceImpl implements HotelService {
 
     public void bill(int rn, int rtype) {
         double amount = 0;
-        String list[] = {"Sandwich", "Pasta", "Noodles", "Coke"};
+        String[] list = {"Sandwich", "Pasta", "Noodles", "Coke"};
         System.out.println("\n*******");
         System.out.println(" Bill:-");
         System.out.println("*******");
@@ -324,37 +324,47 @@ public class HotelServiceImpl implements HotelService {
         }
     }
 
-    public void order(int rn, int rtype) {
-        int i, q;
-        char wish;
-        try {
-            System.out.println("\n==========\n   Menu:  \n==========\n\n1.Sandwich\tRs.50\n2.Pasta\t\tRs.60\n3.Noodles\tRs.70\n4.Coke\t\tRs.30\n");
-            do {
-                i = sc.nextInt();
-                System.out.print("Quantity- ");
-                q = sc.nextInt();
+    public void order(int roomNumber, int roomType) {
+        int menuChoice, quantity; // 1
+        char continueOrder; // 1
+        try { // 2
+            System.out.println("""
+                    
+                    ==========
+                       Menu: \s
+                    ==========
+                    
+                    1.Sandwich\tRs.50
+                    2.Pasta\t\tRs.60
+                    3.Noodles\tRs.70
+                    4.Coke\t\tRs.30
+                    """); // 3
+            do { // 4
+                menuChoice = sc.nextInt(); // 5
+                System.out.print("Quantity- "); // 5
+                quantity = sc.nextInt(); // 5
 
-                switch (rtype) {
-                    case 1:
-                        hotel_ob.luxury_doublerrom[rn].food.add(new Food(i, q));
-                        break;
-                    case 2:
-                        hotel_ob.deluxe_doublerrom[rn].food.add(new Food(i, q));
-                        break;
-                    case 3:
-                        hotel_ob.luxury_singleerrom[rn].food.add(new Food(i, q));
-                        break;
-                    case 4:
-                        hotel_ob.deluxe_singleerrom[rn].food.add(new Food(i, q));
-                        break;
+                switch (roomType) { // 6
+                    case 1: // 7
+                        hotel_ob.luxury_doublerrom[roomNumber].food.add(new Food(menuChoice, quantity)); // 7
+                        break; // 7
+                    case 2: // 8
+                        hotel_ob.deluxe_doublerrom[roomNumber].food.add(new Food(menuChoice, quantity)); // 8
+                        break; // 8
+                    case 3: // 9
+                        hotel_ob.luxury_singleerrom[roomNumber].food.add(new Food(menuChoice, quantity)); // 9
+                        break; // 9
+                    case 4: // 10
+                        hotel_ob.deluxe_singleerrom[roomNumber].food.add(new Food(menuChoice, quantity)); // 10
+                        break; // 10
                 }
-                System.out.println("Do you want to order anything else ? (y/n)");
-                wish = sc.next().charAt(0);
-            } while (wish == 'y' || wish == 'Y');
-        } catch (NullPointerException e) {
-            System.out.println("\nRoom not booked");
-        } catch (Exception e) {
-            System.out.println("Cannot be done");
+                System.out.println("Do you want to order anything else ? (y/n)"); // 11
+                continueOrder = sc.next().charAt(0);  // 11
+            } while (continueOrder == 'y' || continueOrder == 'Y'); // 12
+        } catch (NullPointerException e) { // 13
+            System.out.println("\nRoom not booked"); // 13
+        } catch (Exception e) { // 14
+            System.out.println("Cannot be done"); // 14
         }
     }
 }
