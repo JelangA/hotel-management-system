@@ -3,10 +3,13 @@ package org.test.services;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.util.Scanner;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,6 +24,7 @@ import org.test.models.Singleroom;
 class HotelServiceImplOrderTest {
 
     private HotelServiceImpl hotelService;
+    private final PrintStream originalOut = System.out;
 
     @BeforeEach
     public void setUp() {
@@ -32,12 +36,17 @@ class HotelServiceImplOrderTest {
         HotelServiceImpl.hotel_ob.deluxe_singleerrom = new Singleroom[20];
     }
 
+    @AfterEach
+    public void tearDown() {
+        System.setOut(originalOut);
+    }
+
     @Nested
     @DisplayName("Test class for order scenarios - Luxury Double Room")
     class LuxuryDoubleRoomOrderTest {
 
         @Test
-        @DisplayName("Test order food with menu choice 1, quantity 2")
+        @DisplayName("Memverifikasi sistem menambahkan makanan ke Luxury Double Room dan menghentikan pemesanan saat continue = 'n'")
         void given_whenOrderFoodWithMenuChoice1Qty2_thenAssertBody() throws Exception {
             // Given
             HotelServiceImpl.hotel_ob.luxury_doublerrom[0] = new Doubleroom("John Doe", "1234567890", "M", "Jane Doe", "0987654321", "F");
@@ -61,7 +70,7 @@ class HotelServiceImplOrderTest {
         }
 
         @Test
-        @DisplayName("Test order multiple items with continue flag")
+        @DisplayName("Memverifikasi sistem memungkinkan penambahan multiple items saat continue = 'y' dan menghentikan saat = 'n'")
         void given_whenOrderMultipleItemsWithContinueFlag_thenAssertBody() throws Exception {
             // Given
             HotelServiceImpl.hotel_ob.luxury_doublerrom[0] = new Doubleroom("John Doe", "1234567890", "M", "Jane Doe", "0987654321", "F");
@@ -91,7 +100,7 @@ class HotelServiceImplOrderTest {
     class DeluxeDoubleRoomOrderTest {
 
         @Test
-        @DisplayName("Test order food with menu choice 2, quantity 1")
+        @DisplayName("Memverifikasi sistem menambahkan Pasta ke Deluxe Double Room dengan kalkulasi harga yang benar")
         void given_whenOrderFoodWithMenuChoice2Qty1_thenAssertBody() throws Exception {
             // Given
             HotelServiceImpl.hotel_ob.deluxe_doublerrom[0] = new Doubleroom("Alice Smith", "1111111111", "F", "Bob Smith", "2222222222", "M");
@@ -120,7 +129,7 @@ class HotelServiceImplOrderTest {
     class LuxurySingleRoomOrderTest {
 
         @Test
-        @DisplayName("Test order food with menu choice 3, quantity 1")
+        @DisplayName("Memverifikasi sistem menambahkan Noodles ke Luxury Single Room dengan kalkulasi harga yang benar")
         void given_whenOrderFoodWithMenuChoice3Qty1_thenAssertBody() throws Exception {
             // Given
             HotelServiceImpl.hotel_ob.luxury_singleerrom[0] = new Singleroom("Charlie Brown", "3333333333", "M");
@@ -149,7 +158,7 @@ class HotelServiceImplOrderTest {
     class DeluxeSingleRoomOrderTest {
 
         @Test
-        @DisplayName("Test order food with menu choice 4, quantity 2")
+        @DisplayName("Memverifikasi sistem menambahkan Coke ke Deluxe Single Room dengan kalkulasi harga yang benar")
         void given_whenOrderFoodWithMenuChoice4Qty2_thenAssertBody() throws Exception {
             // Given
             HotelServiceImpl.hotel_ob.deluxe_singleerrom[0] = new Singleroom("Diana Prince", "4444444444", "F");
@@ -178,20 +187,29 @@ class HotelServiceImplOrderTest {
     class ErrorHandlingTest {
 
         @Test
-        @DisplayName("Handle NullPointerException when room not booked")
-        void given_whenRoomNotBooked_thenHandleNullPointerException() throws Exception {
+        @DisplayName("Memverifikasi sistem menangani NullPointerException saat kamar belum dibooking dan menampilkan pesan 'Room not booked'")
+        void givenRoomNotBooked_thenShowRoomNotBookedMessage() throws Exception {
             // Given
-            // Kamar belum diinisialisasi (tetap null)
+            // kamar tidak diinisialisasi (null)
             String input = "1\n1\nn\n";
             InputStream in = new ByteArrayInputStream(input.getBytes());
             System.setIn(in);
+
             Field scField = HotelServiceImpl.class.getDeclaredField("sc");
             scField.setAccessible(true);
             scField.set(null, new Scanner(System.in));
 
-            // When & Then
-            // Tidak boleh melempar exception, tetapi harus ditangani secara internal
-            assertDoesNotThrow(() -> hotelService.order(0, 1), "Method harus menangani NullPointerException dengan baik");
+            // Capture output
+            ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(outContent));
+
+            // When
+            hotelService.order(0, 1);
+
+            // Then
+            String output = outContent.toString();
+            assertTrue(output.contains("Room not booked"),
+                    "Harus menampilkan pesan 'Room not booked'");
         }
     }
 
