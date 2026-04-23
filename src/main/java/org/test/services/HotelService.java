@@ -1,11 +1,11 @@
 package org.test.services;
 
 public interface HotelService {
-    void CustDetails(int i, int rn);
-    void bookroom(int i);
-    void features(int i);
+    void CustDetails(int i, int rn); //Fadilah
+    void bookroom(int i); //Luthfi
+    void features(int i); //Fadilah
     void availability(int i);
     void bill(int rn, int rtype);
-    void deallocate(int rn, int rtype);
-    void order(int rn, int rtype);
+    void deallocate(int rn, int rtype); //Luthfi
+    void order(int rn, int rtype); //Jelang
 }

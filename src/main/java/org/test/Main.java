@@ -30,18 +30,40 @@ public class Main {
             x:
             do{
 
-                System.out.println("\nEnter your choice :\n1.Display room details\n2.Display room availability \n3.Book\n4.Order food\n5.Checkout\n6.Exit\n");
+                System.out.println("\n" +
+                        "Enter your choice :\n" +
+                        "1.Display room details\n" +
+                        "2.Display room availability \n" +
+                        "3.Book\n" +
+                        "4.Order food\n" +
+                        "5.Checkout\n" +
+                        "6.Exit\n");
                 ch = sc.nextInt();
                 switch(ch){
-                    case 1: System.out.println("\nChoose room type :\n1.Luxury Double Room \n2.Deluxe Double Room \n3.Luxury Single Room \n4.Deluxe Single Room\n");
+                    case 1: System.out.println("\n" +
+                            "Choose room type :\n" +
+                            "1.Luxury Double Room \n" +
+                            "2.Deluxe Double Room \n" +
+                            "3.Luxury Single Room \n" +
+                            "4.Deluxe Single Room\n");
                         ch2 = sc.nextInt();
                         hotelService.features(ch2);
                         break;
-                    case 2:System.out.println("\nChoose room type :\n1.Luxury Double Room \n2.Deluxe Double Room \n3.Luxury Single Room\n4.Deluxe Single Room\n");
+                    case 2:System.out.println("\n" +
+                            "Choose room type :\n" +
+                            "1.Luxury Double Room \n" +
+                            "2.Deluxe Double Room \n" +
+                            "3.Luxury Single Room\n" +
+                            "4.Deluxe Single Room\n");
                         ch2 = sc.nextInt();
                         hotelService.availability(ch2);
                         break;
-                    case 3:System.out.println("\nChoose room type :\n1.Luxury Double Room \n2.Deluxe Double Room \n3.Luxury Single Room\n4.Deluxe Single Room\n");
+                    case 3:System.out.println("\n" +
+                            "Choose room type :\n" +
+                            "1.Luxury Double Room \n" +
+                            "2.Deluxe Double Room \n" +
+                            "3.Luxury Single Room\n" +
+                            "4.Deluxe Single Room\n");
                         ch2 = sc.nextInt();
                         hotelService.bookroom(ch2);
                         break;
